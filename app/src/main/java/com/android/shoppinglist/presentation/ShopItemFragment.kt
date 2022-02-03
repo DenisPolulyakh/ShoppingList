@@ -140,15 +140,12 @@ class ShopItemFragment : Fragment() {
         }
 
         screenMode = mode
-
         if (screenMode == MODE_EDIT) {
             if (!args.containsKey(SHOP_ITEM_ID)) {
                 throw RuntimeException("Param shop item id is absent")
             }
             shopItemId = args.getInt(SHOP_ITEM_ID, ShopItem.UNDEFINED_ID)
         }
-
-
 
     }
 
@@ -178,7 +175,7 @@ class ShopItemFragment : Fragment() {
         fun newInstanceEditItem(shopItemId: Int): ShopItemFragment {
             return ShopItemFragment().apply {
                 arguments = Bundle().apply {
-                    putString(SCREEN_MODE, MODE_ADD)
+                    putString(SCREEN_MODE, MODE_EDIT)
                     putInt(SHOP_ITEM_ID, shopItemId)
                 }
             }
