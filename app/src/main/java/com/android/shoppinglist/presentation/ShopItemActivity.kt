@@ -15,7 +15,6 @@ import com.google.android.material.textfield.TextInputLayout
 
 
 class ShopItemActivity : AppCompatActivity() {
-/*
     private lateinit var viewModel: ShopItemViewModel
 
     private lateinit var tilName: TextInputLayout
@@ -26,20 +25,16 @@ class ShopItemActivity : AppCompatActivity() {
 
 
     private var screenMode = MODE_UNKNOWN
-    private var shopItemId = ShopItem.UNDEFINED_ID*/
+    private var shopItemId = ShopItem.UNDEFINED_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_item)
-       /* parseIntent()
-        viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
-        initViews()
-        addTextChangeListeners()
+        parseIntent()
         launchRightMode()
-        observeViewModel()*/
     }
 
-    /*private fun observeViewModel(){
+    private fun observeViewModel(){
         viewModel.errorInputCount.observe(this) {
             val message = if (it) {
                 getString(R.string.error_input_count)
@@ -63,10 +58,12 @@ class ShopItemActivity : AppCompatActivity() {
     }
 
     private fun launchRightMode() {
-        when (screenMode) {
-            MODE_EDIT -> launchEditMode()
-            MODE_ADD -> launchAddMode()
+        val fragment = when (screenMode) {
+            MODE_EDIT -> ShopItemFragment.newInstanceEditItem(shopItemId)
+            MODE_ADD -> ShopItemFragment.newInstanceAddItem()
+            else ->   throw RuntimeException("Unknown screen mode $screenMode")
         }
+        supportFragmentManager.beginTransaction().add(R.id.shop_item_container, fragment ).commit()
     }
 
     private fun addTextChangeListeners() {
@@ -144,7 +141,7 @@ class ShopItemActivity : AppCompatActivity() {
         etName = findViewById(R.id.et_name)
         etCount = findViewById(R.id.et_count)
         btnSave = findViewById(R.id.save_button)
-    }*/
+    }
 
     companion object {
         private const val EXTRA_SCREEN_MODE = "extra_mode"
