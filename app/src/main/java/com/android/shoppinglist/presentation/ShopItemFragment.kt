@@ -1,10 +1,10 @@
 package com.android.shoppinglist.presentation
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +26,22 @@ class ShopItemFragment : Fragment() {
     private var screenMode: String = MODE_UNKNOWN
     private var shopItemId: Int = ShopItem.UNDEFINED_ID
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    private lateinit var onEditingFinishListener: OnEditingFinishListener
+
+
+    override fun onAttach(context: Context) {
+        Log.d("ShopItemFragment","Вызван onAttach")
+        super.onAttach(context)
+
+        if(context  is OnEditingFinishListener){
+            onEditingFinishListener = context
+        }else{
+            throw java.lang.RuntimeException("Activity must implement  OnEditingFinishListener")
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("ShopItemFragment","Вызван  onCreate")
         super.onCreate(savedInstanceState)
         parseParams()
     }
@@ -36,11 +51,48 @@ class ShopItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("ShopItemFragment","Вызван  onCreateView")
         return inflater.inflate(R.layout.fragment_shop_item, container, false)
+    }
+
+    override fun onStart() {
+        Log.d("ShopItemFragment","Вызван  onStart")
+        super.onStart()
+    }
+
+    override fun onResume() {
+        Log.d("ShopItemFragment","Вызван  onResume")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Log.d("ShopItemFragment","Вызван  onPause")
+        super.onPause()
+    }
+
+
+    override fun onStop() {
+        Log.d("ShopItemFragment","Вызван  onStop")
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        Log.d("ShopItemFragment","Вызван  onDestroyView")
+        super.onDestroyView()
+    }
+    override fun onDestroy() {
+        Log.d("ShopItemFragment","Вызван  onDestroy")
+        super.onDestroy()
+    }
+
+    override fun onDetach() {
+        Log.d("ShopItemFragment","Вызван  onDetach")
+        super.onDetach()
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d("ShopItemFragment","Вызван onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
         initViews(view)
@@ -68,7 +120,7 @@ class ShopItemFragment : Fragment() {
             tilName.error = message
         }
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+           onEditingFinishListener.onEditingFinished()
         }
     }
 
@@ -155,6 +207,10 @@ class ShopItemFragment : Fragment() {
         etName = view.findViewById(R.id.et_name)
         etCount = view.findViewById(R.id.et_count)
         btnSave = view.findViewById(R.id.save_button)
+    }
+
+    interface OnEditingFinishListener {
+        fun onEditingFinished()
     }
 
     companion object {
